@@ -1,0 +1,70 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+type Address {
+  street   String
+  number   String
+  lat      Float
+  long     Float
+  city     String
+  district String
+  zip      String
+}
+
+type Image {
+  url      String
+  order    Int?
+  thumbUrl String?
+}
+
+type Price {
+  regular Float
+  sale    Float
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  hotels    String[] @db.ObjectId
+  hotelsObj Hotel[]  @relation(fields: [hotels], references: [id])
+}
+
+model Service {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  isParent  Boolean
+  parent    String   @db.ObjectId
+  hotels    String[] @db.ObjectId
+  hotelsObj Hotel[]  @relation(fields: [hotels], references: [id])
+  rooms     String[] @db.ObjectId
+  roomsObj  Room[]   @relation(fields: [rooms], references: [id])
+}
+
+model Room {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  price       Price
+  images      Image[]
+  services    String[]  @db.ObjectId
+  servicesObj Service[] @relation(fields: [services], references: [id])
+  hotel       Hotel?    @relation(fields: [hotelId], references: [id])
+  hotelId     String?   @db.ObjectId
+}
+
+model Hotel {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  address       Address
+  images        Image[]
+  rooms         Room[]
+  categories    String[]   @db.ObjectId
+  categoriesObj Category[] @relation(fields: [categories], references: [id])
+  services      String[]   @db.ObjectId
+  servicesObj   Service[]  @relation(fields: [services], references: [id])
+}
