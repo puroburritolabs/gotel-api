@@ -29,10 +29,11 @@ type Price {
 }
 
 model Category {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  hotels    String[] @db.ObjectId
-  hotelsObj Hotel[]  @relation(fields: [hotels], references: [id])
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  hotels      String[] @db.ObjectId
+  hotelsObj   Hotel[]  @relation(fields: [hotels], references: [id])
 }
 
 model Service {
