@@ -7,6 +7,6 @@ export class CreateServiceDto {
   @ApiProperty()
   isParent: boolean;
 
-  @ApiProperty()
-  parent: string;
+  @ApiProperty({required:false})
+  parent?: string;
 }
